@@ -1,0 +1,28 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <h1>Mis Valoraciones</h1>
+  <div class="container-fluid py-3">
+    {% for valoracion in valoraciones_usuario %}
+      <div class="card mb-3">
+        <div class="row no-gutters">
+          <div class="col-md-3">
+            <img src="{{ valoracion.producto.Imagen.url }}" alt="{{ valoracion.producto.Nombre }}" class="card-img" width="100%" height="100%">
+          </div>
+          <div class="col-md-9">
+            <div class="card-body">
+              <h5 class="card-title">Producto: {{ valoracion.producto.Nombre }}</h5>
+              <p class="card-text">Rating: {{ valoracion.rating }}</p>
+              <p class="card-text">Fecha: {{ valoracion.fecha|naturaltime }}</p>
+              <p class="card-text">Comentario: {{ valoracion.comentario }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="my-3">
+    {% endfor %}
+  </div>
+{% endblock %}

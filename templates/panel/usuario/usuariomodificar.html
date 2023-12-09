@@ -1,0 +1,30 @@
+{% extends "navbar/tienda.html" %}
+
+{% block title %}
+    Modificar contraseña
+{% endblock title %}
+
+{% block content %}
+
+<h1> Cambio contraseña usuario: {{users.username}}</h1>
+
+<h2>Ingrese su nueva contraseña</h2>
+
+<hr>
+<form action="/solgas/administrar/modificar/{{user.id}}/" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="username" value={{ users.username }}>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Contraseña</label>
+            <input class="form-control" type="password" name="password" placeholder="Ingrese la contraseña">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Confirmación de la contraseña</label>
+            <input class="form-control" type="password" name="re-password" placeholder="Reingrese la contraseña">
+        </div>
+    </div>
+    <button class="btn btn-secondary" type="submit">Cambiar contraseña</button>
+    <a class="btn btn-danger" href="/">Cancelar</a>
+</form>
+{% endblock content %}

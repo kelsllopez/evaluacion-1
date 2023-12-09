@@ -1,0 +1,14 @@
+{% extends 'navbar/tienda.html' %}
+{% load humanize %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">Modificar Pedido</h1>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "navbar/tienda.html" %}
+
+{% block content %}
+<hr>
+<div class="">
+  <div class="container">
+      <div class="row   ">
+          <div class="col-md-12">
+              <div class="card  shadow producto_data">
+                  <div class="card-body "> 
+                  <h1 class="mb-0">    
+                    Detalles MASCOTA
+                  </h1>
+                  <hr>
+                  <p><b> ID :</b>   {{ contacto.id }}</p>
+                  <p><b> NOMBRE :</b>  {{ contacto.nombre }}</p>
+                  <p><b> tipo :</b>  {{ contacto.correo }}</p>                    
+                  <p><b> mensaje :</b>  {{ contacto.mensaje }}</p>     
+                  <p class="   text-justify">
+                    <a href="/listarcontacto" class="btn btn-dark my-4 mx-auto">Atras</a>
+                  </p>               
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock  %}

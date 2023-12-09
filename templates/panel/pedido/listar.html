@@ -1,0 +1,77 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container p-3">
+  <ul class="nav justify-content-center bg-light">
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Productos</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:mostrar_materiales' %}">Materiales</a>
+    </a>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_categorias' %}">Categorias</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_comentarios' %}">Valoraciones</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listarcontacto' %}">Contacto</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="/solgas/usuario/administrar">Usuario</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:administrar_pedidos' %}">Pedidos</a>
+    </a>
+    </li>
+  </ul>
+</div>
+  <div class="container mt-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead class=" text-center">
+
+                    <tr>
+                    <th scope="col">#id</th>
+                    <th scope="col">Uicacion</th>
+                    <th scope="col">Carro de Compras</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center ">
+                    <tr>
+                        {% if ubicacion %}
+                        {% for ubic in ubicacion %}
+                    <td>{{ ubic.id }}</td>
+                    <td>
+                        {{ ubic.direccion }}
+                    </td>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if rawcart %}
+                    {% for carro in rawcart %}
+                    <td>{{ carro.id }}</td>
+                <td>
+                    {{ carro.producto.Nombre }}
+                </td>
+                <td>
+                    {{ carro.producto.precio }}                
+                </td>
+                    {% endfor %}
+                {% endif %}
+                    </tr>
+                </tbody>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

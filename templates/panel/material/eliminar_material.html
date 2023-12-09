@@ -1,0 +1,25 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-danger text-white">
+          <h1 class="mb-0">Eliminar Material</h1>
+        </div>
+        <div class="card-body">
+          <p class="lead">¿Estás seguro de que deseas eliminar el material "{{ material.nombre }}"?</p>
+          <form method="post">
+            {% csrf_token %}
+            <div class="text-center">
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+              <a href="{% url 'tienda:mostrar_materiales' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

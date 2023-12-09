@@ -1,0 +1,31 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card edit-profile-card">
+    <div class="card-body">
+      <h2 class="card-title">Editar Perfil</h2>
+
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h3>Información Básica</h3>
+        {{ user_form|crispy }}
+        <h3>Datos Adicionales</h3>
+        {{ perfil_form|crispy }}
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

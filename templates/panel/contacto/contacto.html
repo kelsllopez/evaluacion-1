@@ -1,0 +1,24 @@
+{% extends "navbar/tienda.html" %}
+
+{% block content %}
+<br>
+<div class="container">
+    <h5 class="-0.2s text-center">CONTACTO</h5>
+    <div class="row">
+        <div class="col-lg-6 offset-lg-0 col-sm-12 mx-auto">
+            {% load crispy_forms_tags %}
+            <form method="post" action="">
+                {% csrf_token %} {{ form | crispy }}
+                <div class="justify-content-center">
+                    <button type="reset" class="btn btn-secondary mt-1 mx-2">Cancelar</button>
+                    <button type="submit" class="btn btn-danger mt-1">Enviar</button>
+                </div>
+            </form>
+            <!-- Icons -->
+        </div>
+        <div class="col-lg-6 rounded embed-responsive embed-responsive-4by3 p-3">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3064.3273489664516!2d-73.21453172400344!3d-39.82207775146552!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9615ee915265860b%3A0x45d14ebfe7bdb8fe!2sBolivia%20134%2C%20Valdivia%2C%20Los%20R%C3%ADos!5e0!3m2!1ses!2scl!4v1700481418517!5m2!1ses!2scl" width="500" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>    
+        </div>
+    </div>
+</div>
+{% endblock %}

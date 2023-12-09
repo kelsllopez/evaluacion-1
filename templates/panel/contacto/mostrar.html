@@ -1,0 +1,88 @@
+{% extends "navbar/tienda.html" %}
+{% load static %} 
+
+{% block content %}
+
+<br>
+
+<div class="container p-3">
+  <ul class="nav justify-content-center bg-light">
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Productos</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:mostrar_materiales' %}">Materiales</a>
+    </a>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_categorias' %}">Categorias</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_comentarios' %}">Valoraciones</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listarcontacto' %}">Contacto</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="/solgas/usuario/administrar">Usuario</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:administrar_pedidos' %}">Pedidos</a>
+    </a>
+    </li>
+  </ul>
+</div>
+
+<br>
+
+<div class="d-flex flex-column">
+  <div class="container text-center">
+    <div class="row justify-content-center">
+      <div class="col-lg-12   ">
+        <div class="card">
+
+          <div class="card-header text-center font-weight-bold">
+            {{ title }}
+          </div>
+          <div class="card-body table-responsive align-items-center">
+            <div class="d-flex justify-content-end mb-2">
+              <form class="flex-grow-1 mr-2 py-2" method="GET" action="{% url 'tienda:listarcontacto' %}">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Buscar producto..." name="q" value="{{ request.GET.q }}">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>id</th>
+                  <th>Nombre</th>
+                  <th>Correo</th>
+                  <th>Mensaje</th>
+                  <th>opcion</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for contac in contacto %}
+                <tr>
+                  <td>{{ contac.id }}</td>
+                  <td><a href="{% url 'tienda:detallecontacto' contac.id %}">{{ contac.nombre }}</td>
+                  <td>{{ contac.correo }}</td>
+                  <td>{{ contac.mensaje }}</td>
+                  <td>
+                      <a class="btn btn-danger btn-sm" href="{% url 'tienda:deletecontacto' contac.id %}" type="button"><i class="bi bi-trash-fill"></i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock  %}
+

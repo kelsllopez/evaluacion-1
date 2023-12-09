@@ -1,0 +1,85 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+
+  .table th, .table td {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .table th {
+    background-color: #f2f2f2;
+  }
+
+  .table tr:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
+<div class="container p-3">
+  <ul class="nav justify-content-center bg-light">
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Productos</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:mostrar_materiales' %}">Materiales</a>
+    </a>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_categorias' %}">Categorias</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_comentarios' %}">Valoraciones</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listarcontacto' %}">Contacto</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="/solgas/usuario/administrar">Usuario</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:administrar_pedidos' %}">Pedidos</a>
+    </a>
+    </li>
+  </ul>
+</div>
+<div class="container">
+  <h1 class="text-center mb-4">Listar Comentarios</h1>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Comentario</th>
+        <th>Usuario</th>
+        <th>Rating</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for comentario in comentarios %}
+        <tr>
+          <td>{{ comentario.comentario }}</td>
+          <td>{{ comentario.usuario.username }}</td>
+          <td>{{ comentario.rating }}</td>
+          <td>{{ comentario.fecha }}</td>
+          <td>
+            <a href="{% url 'tienda:eliminar_comentario' comentario.id %}" class="btn btn-danger btn-sm eliminar-btn" type="button">
+              <i class="bi bi-trash-fill"></i>
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

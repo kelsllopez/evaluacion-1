@@ -1,0 +1,224 @@
+{% extends 'navbar/tienda.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mt-4">Carrito de Compras</h1>
+    <p class="text-center">Total de Productos en el Carro: {{ carrito.count }}</p>
+
+
+    <form action="{% url 'tienda:eliminar_items_carrito' %}" method="post">
+        {% csrf_token %}
+
+        <div class="cart-buttons mb-3">
+            {% if carrito %}
+                <button id="seleccionar-todos" class="btn btn-primary mr-2">Seleccionar Todos</button>
+                <button type="submit" name="action" value="eliminar_todos" class="btn btn-danger mr-2">Eliminar Todos</button>
+                <button type="submit" class="btn btn-danger">Eliminar Seleccionados</button>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th> </th>
+                                <th>Producto</th>
+                                <th>Imagen</th>
+                                <th>Precio Unitario</th>
+                                <th>Cantidad</th>
+                                <th>Precio Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in carrito %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="selected_items" value="{{ item.id }}" class="selectItem" />
+                                    </td>
+                                    <td>
+                                        <h4>{{ item.producto.Nombre }}</h4>
+                                    </td>
+                                    <td>
+                                        <img src="{{ item.producto.Imagen.url }}" alt="{{ item.producto.Nombre }}" class="img-thumbnail product-image" width="100" height="100">
+
+                                    </td>
+                                    <td id="precioUnitario{{ item.id }}">{{ item.producto.precio|intcomma }}</td>
+                                    <td id="cantidad{{ item.id }}">{{ item.producto_cantidad }}</td>
+                                    <td id="precioTotal{{ item.id }}">{{ item.subtotal|intcomma }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">No hay productos en el carrito.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="summary bg-light p-3">
+                    <h3 class="mb-4">Resumen de Compra</h3>
+                    <p id="subtotalTotal">Subtotal total: $0 CLP</p>
+                    <p id="ivaTotal">Iva: $0 CLP</p>
+                    <button id="comprarButton" class="btn btn-success btn-block" disabled>Comprar (<span id="contadorProductosSeleccionados">0</span>)</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .cart-buttons {
+        margin-bottom: 20px;
+    }
+
+    .product-image {
+        max-width: 80px;
+        max-height: 80px;
+        object-fit: contain;
+    }
+
+    .summary {
+        border: 1px solid #ddd;
+        margin-top: 20px; /* Ajusta el margen superior en dispositivos móviles */
+        border-radius: 8px;
+    }
+
+    @media (max-width: 767px) {
+        .cart-buttons {
+            text-align: center;
+        }
+
+        .cart-buttons button {
+            margin-bottom: 10px;
+        }
+
+        .summary {
+            margin-top: 0; /* Elimina el margen superior en dispositivos móviles */
+        }
+    }
+     .zoomable {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .zoomable:hover {
+        transform: scale(1.2);
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var seleccionados = false;
+        var comprarPresionado = false;
+    
+        $('#seleccionar-todos').on('click', function(e) {
+            e.preventDefault();
+            if (seleccionados) {
+                $('input[type="checkbox"]').prop('checked', false);
+                seleccionados = false;
+            } else {
+                $('input[type="checkbox"]').prop('checked', true);
+                seleccionados = true;
+            }
+    
+            checkSelectedItems();
+        });
+    
+        $('#comprarButton').on('click', function() {
+            comprarPresionado = true;
+            checkSelectedItems();
+        });
+    
+        $('.selectItem').on('change', function() {
+            checkSelectedItems();
+        });
+    
+        $('form').on('submit', function() {
+            // Redirigir solo al presionar "Comprar"
+            if (comprarPresionado) {
+                window.location.href = "{% url 'tienda:procesar_pedido' %}";
+                return false; // Evitar que el formulario se envíe si se presionó "Comprar"
+            }
+        });
+    
+        function checkSelectedItems() {
+            var precioUnitarioTotal = 0;
+            var subtotalTotal = 0;
+            var ivaTotal = 0;
+    
+            $('.selectItem:checked').each(function() {
+                var itemId = $(this).val();
+                var precioUnitario = parseFloat($('#precioUnitario' + itemId).text().replace(/\D/g, ''));
+                var cantidad = parseInt($('#cantidad' + itemId).text());
+                var precioTotal = precioUnitario * cantidad;
+                var totalProductos = $('.selectItem').length;
+    
+                precioUnitarioTotal += precioUnitario;
+                subtotalTotal += precioTotal;
+                ivaTotal += precioTotal * 0.19;
+            });
+    
+            console.log('Productos seleccionados:', $('.selectItem:checked').length);
+    
+            $('#precioUnitarioTotal').text('Precio unitario total: $' + precioUnitarioTotal.toLocaleString() + ' CLP');
+            $('#subtotalTotal').text('Subtotal total: $' + subtotalTotal.toLocaleString() + ' CLP');
+            $('#ivaTotal').text('Iva: $' + ivaTotal.toLocaleString() + ' CLP');
+    
+            var productosSeleccionados = $('.selectItem:checked').length;
+            $('#contadorProductosSeleccionados').text(productosSeleccionados);
+    
+            if (productosSeleccionados > 0) {
+                $('#comprarButton').prop('disabled', false);
+            } else {
+                $('#comprarButton').prop('disabled', true);
+            }
+        }
+    });
+    
+
+
+    $('form').on('submit', function() {
+        // Redirigir solo al presionar "Comprar"
+        if (comprarPresionado) {
+            window.location.href = "{% url 'tienda:procesar_pedido' %}";
+            return false; // Evitar que el formulario se envíe si se presionó "Comprar"
+        }
+
+        // Redirigir solo al presionar "Eliminar Seleccionados"
+        if ($('button[name="action"]:clicked').val() === 'eliminar') {
+            window.location.href = "{% url 'tienda:eliminar_items_carrito' %}";
+            return false; // Evitar que el formulario se envíe si se presionó "Eliminar Seleccionados"
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var thumbnails = document.querySelectorAll('.product-image');
+    
+        thumbnails.forEach(function (thumbnail) {
+          thumbnail.addEventListener('mouseover', function () {
+            enlargeImage(thumbnail);
+          });
+    
+          thumbnail.addEventListener('mouseout', function () {
+            resetImage(thumbnail);
+          });
+        });
+    
+        function enlargeImage(thumbnail) {
+          thumbnail.style.transform = 'scale(2)';
+          thumbnail.style.transition = 'transform 0.3s ease-in-out';
+        }
+    
+        function resetImage(thumbnail) {
+          thumbnail.style.transform = 'scale(1)';
+          thumbnail.style.transition = 'transform 0.3s ease-in-out';
+        }
+      });
+    </script>
+    
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'navbar/tienda.html' %}
+{% load humanize %}
+
+{% block content %}
+<body>
+    <div class="container p-3">
+      <ul class="nav justify-content-center bg-light">
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Productos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'tienda:mostrar_materiales' %}">Materiales</a>
+        </a>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'tienda:listar_categorias' %}">Categorias</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'tienda:listar_comentarios' %}">Valoraciones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'tienda:listarcontacto' %}">Contacto</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/solgas/usuario/administrar">Usuario</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'tienda:administrar_pedidos' %}">Pedidos</a>
+        </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/carrucel">carrucel</a>
+        </li> 
+      </ul>
+    </div>
+    
+
+  <div class="container mt-4">
+    <h1 class="mb-4">Administrar Pedidos</h1>
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID Pedido</th>
+            <th>Usuario</th>
+            <th>Estado</th>
+            <th>Acciones</th>  <!-- Nueva columna para acciones -->
+            <th>Actualizacion</th>  <!-- Nueva columna para acciones -->
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for pedido in pedidos %}
+            <tr>
+              <td>{{ pedido.id }}</td>
+              <td>{{ pedido.usuario.username }}</td>
+              <td>{{ pedido.estado }}</td>
+              <td>{{ pedido.creado }}</td>
+
+              <td>
+                <a href="{% url 'tienda:ver_pedido' pedido.id %}" class="btn btn-info">Ver</a>
+                <a href="{% url 'tienda:modificar_pedido' pedido.id %}" class="btn btn-warning">Modificar</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

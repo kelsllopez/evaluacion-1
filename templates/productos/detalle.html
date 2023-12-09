@@ -1,0 +1,434 @@
+{% extends "navbar/tienda.html" %}
+{% load humanize %}
+
+{% block content %}
+
+<style>
+  .star-rating input[type="radio"]:checked + label {
+    color: orange;
+  }
+
+  .rate > input {
+    display: none;
+  }
+
+  .rate {
+    display: inline-block;
+    border: 0;
+  }
+
+  .rate > label {
+    float: right;
+  }
+
+  .rate > label:before {
+    display: inline-block;
+    font-size: 1.1rem;
+    font-family: FontAwesome;
+    content: "\f005";
+    margin: 0;
+    padding: 0.3rem .2rem;
+    cursor: pointer;
+  }
+
+  .rate .half:before {
+    content: "\f089";
+    position: absolute;
+    padding-right: 0;
+  }
+
+  input:checked ~ label,
+  label:hover ~ label {
+    color: #ffb503;
+  }
+
+  input:checked + label:hover,
+  input:checked ~ label:hover,
+  input:checked ~ label:hover ~ label,
+  label:hover ~ input:checked ~ label {
+    color: #cc9000;
+  }
+
+  .rating-star i {
+    color: #ffb503 !important;
+    font-size: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .producto_data {
+    perspective: 1000px;
+  }
+
+  .pic-box {
+    position: relative;
+  }
+
+  .producto_relacionado .card {
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+  }
+
+  .producto_relacionado .card:hover {
+    transform: rotateY(10deg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  /* Estilos generales para las imágenes */
+  .zoom {
+      margin: 5px;
+      overflow: hidden;
+  }
+
+  .zoom img {
+      transition: transform 0.5s;
+  }
+
+  .zoom:hover img {
+      transform: scale(1.1);
+  }
+
+  /* Media query para ajustar el tamaño de las imágenes en pantallas pequeñas */
+  @media only screen and (max-width: 768px) {
+      .zoom img {
+          width: 100%; /* O ajusta el ancho según tus necesidades */
+          height: auto;
+      }
+  }
+</style>
+
+<br>
+<div class="container">
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">inicio</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'tienda:productocategoria' productos.categoria.nombre %}">{{ productos.categoria.nombre }}</a></li>
+   <li class="breadcrumb-item active" aria-current="page">{{ productos.Nombre }}</li>
+  </ol>
+</nav>
+</div> 
+<div class="container py-2">
+<div class="card shadow producto_data">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        {% if productos.tendencia %}
+          <div class="badge bg-danger text-white">tendencia</div>
+        {% endif %}
+        <div class="d-flex justify-content-around">
+          {% if productos.Imagen %}
+            <div class="zoom" onmouseover="changeCentralImage('{{ productos.Imagen.url }}')" onmouseout="resetCentralImage()">
+              <img src="{{ productos.Imagen.url }}" alt="{{ producto }}" width="169px" height="100px">
+            </div>
+          {% endif %}
+          {% if productos.Imagen2 %}
+            <div class="zoom" onmouseover="changeCentralImage('{{ productos.Imagen2.url }}')" onmouseout="resetCentralImage()">
+              <img src="{{ productos.Imagen2.url }}" alt="{{ producto }}" width="169px" height="100px">
+            </div>
+          {% endif %}
+          {% if productos.Imagen3 %}
+            <div class="zoom" onmouseover="changeCentralImage('{{ productos.Imagen3.url }}')" onmouseout="resetCentralImage()">
+              <img src="{{ productos.Imagen3.url }}" alt="{{ producto }}" width="169px" height="100px">
+            </div>
+          {% endif %}
+        </div>
+        <div class="zoom" id="centralImage">
+          {% if productos.Imagen_Central %}
+            <img src="{{ productos.Imagen_Central.url }}" class="card-img-top" alt="{{ producto }}" width="350px" height="250px" >
+          {% else %}
+            <p>No hay imagen central disponible.</p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <!-- Contenido del carrito y otros elementos dentro de la tarjeta -->
+        <h1 class="mb-0">
+          {{ productos.Nombre }}
+        </h1>
+        <hr>
+        <p>Precio: ${{ productos.precio|intcomma }}</p>
+        <hr>
+        <div class="mb-0">
+          {% if productos.stock %}
+            <p class="badge bg-warning">En stock: {{ productos.stock }}</p>
+          {% else %}
+            <p class="badge bg-danger">Agotado</p>
+          {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'tienda:addtocart' productos.id %}">
+            {% csrf_token %}
+            <input type="hidden" value="{{ productos.id }}" name="producto_id">
+            <div class="input-group" style="width:150px">
+              <button class="input-group-text bg-dark text-light" id="btnMinus" type="button"><i class="bi bi-dash"></i></button>
+              <input type="text" name="qty" id="txtQty" value="1" class="form-control text-center" readonly>
+              <button class="input-group-text bg-dark text-light" id="btnPlus" type="button"><i class="bi bi-plus-lg"></i></button>
+            </div>
+            <button class="btn btn-primary mt-3" id="btnCart" type="submit"><i class="bi-cart-fill"></i> Agregar al carro</button>
+            <a href="{% url 'tienda:cart' %}" class="btn btn-success mt-3" role="button">Ir al carro</a>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+<div class="px-3 px-lg-5 mt-3">
+    <ul class="nav nav-tabs" id="miTabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="productosRelacionados-tab" data-bs-toggle="tab" href="#productosRelacionados">Productos Relacionados</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="valoraciones-tab" data-bs-toggle="tab" href="#valoraciones">Valoraciones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="Descripcion-tab" data-bs-toggle="tab" href="#Descripcion">Descripcion</a>
+      </li>
+    </ul>
+    
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="productosRelacionados">
+          <h2 class="fw-bolder mb-4 text-center">Productos relacionados</h2>
+          <div class="row gx-2 gx-md-3 gx-lg-4 justify-content-center producto_relacionado">
+            {% for otroProducto in productosRelacionados %}
+              {% if forloop.counter <= 12 and otroProducto.stock > 0 %}
+                <div class="col-md-3 col-6 pb-3">
+                      <div class="card movimiento border-0 h-100" id="movimiento">
+                          {% if otroProducto.Imagen_Central %}
+                              <img class="card-img-top" src="{{ otroProducto.Imagen_Central.url }}" width="350px" height="200px" />
+                          {% else %}
+                              <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="producto" />
+                          {% endif %}
+                          <div class="card-body p-4">
+                              <div class="text-center">
+                                  <h5 class="fw-bolder">{{ otroProducto.Nombre }}</h5>
+                                  <p>Precio: ${{ otroProducto.precio|intcomma }}</p>
+                                  {% if otroProducto.tendencia %}
+                                      <label class="badge bg-info text-white">tendencia</label>
+                                  {% endif %}
+                                  <a href="{% url 'tienda:producto' otroProducto.Nombre %}">Ver detalles</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+<div class="tab-pane fade" id="valoraciones">
+  <br>
+    <div class="container">
+      <div class="row">
+          <div class="col-md-9">
+              {% if user.is_authenticated %}
+              <form method="post" action="{% url 'tienda:producto' productos.Nombre %}">
+                  {% csrf_token %}
+                  <div>
+                      <label>¿Cómo califica este producto?</label>
+                      <br>
+                      <div class="rate">
+                        <input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="EXCELENTE"></label>
+                        <input type="radio" name="rating" id="rating9" value="4.5" required /><label for="rating9" title="4.5" class="half"></label>
+                        <input type="radio" name="rating" id="rating8" value="4" required /><label for="rating8" title="MUY BUENO"></label>
+                        <input type="radio" name="rating" id="rating7" value="3.5" required /><label for="rating7" title="3.5" class="half"></label>
+                        <input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="BUENO"></label>
+                        <input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
+                        <input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="MALO"></label>
+                        <input type="radio" name="rating" id="rating3" value="1.5" required /><label for="rating3" title="1.5" class="half"></label>
+                        <input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="MUY MALO"></label>
+                        <input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
+                      </div>
+                      <br>
+                      <div class="form-field">
+                        <label for="comentario" class="form-label">Deja tu Comentario:</label>
+                        <textarea name="comentario" rows="4" class="form-control textarea-field" id="comentario" placeholder="Escribe tu comentario aquí..."></textarea>
+                    </div>
+                      <br>
+                      <button type="submit" class="btn btn-primary">Enviar comentario</button>
+                  </div>
+              </form>
+              {% else %}
+              <p>Debes estar registrado para poder dejar comentarios <a href="/registrar">regístrese</a>.</p>
+              <p>Comentarios</p>
+              {% endif %}
+              <br>
+              <div class="comment-container">
+                <div class="comment-container">
+                  {% for comentario in comentarios %}
+                  <article class="box mb-3 {% if forloop.counter > 3 and not mostrar_mas_comentarios %}d-none{% endif %} comentario-card" id="comentario-{{ comentario.id }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="user-info">
+                                    <span class="date text-muted">{{ comentario.fecha }}</span>
+                                    <h6 class="mb-1">User: {{ comentario.usuario.username }}</h6>
+                                </div>
+                                <div class="rating-star">
+                                    <span>
+                                        Valoración:
+                                        <i class="fa fa-star{% if comentario.rating == 0.5 %}-half-o{% elif comentario.rating < 1 %}-o{% endif %}" aria-hidden="true"></i>
+                                        <i class="fa fa-star{% if comentario.rating == 1.5 %}-half-o{% elif comentario.rating < 2 %}-o{% endif %}" aria-hidden="true"></i>
+                                        <i class="fa fa-star{% if comentario.rating == 2.5 %}-half-o{% elif comentario.rating < 3 %}-o{% endif %}" aria-hidden="true"></i>
+                                        <i class="fa fa-star{% if comentario.rating == 3.5 %}-half-o{% elif comentario.rating < 4 %}-o{% endif %}" aria-hidden="true"></i>
+                                        <i class="fa fa-star{% if comentario.rating == 4.5 %}-half-o{% elif comentario.rating < 5 %}-o{% endif %}" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <p class="card-text">Comentario: {{ comentario.comentario }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                  {% endfor %}
+              </div>
+              {% if comentarios|length > 3 %}
+              <button class="btn btn-primary" id="mostrarMasComentarios" style="{% if not mostrar_mas_comentarios %}display: block;{% else %}display: none;{% endif %}">Mostrar más comentarios</button>
+              <button class="btn btn-primary" id="ocultarComentarios" style="{% if mostrar_mas_comentarios %}display: block;{% else %}display: none;{% endif %}">Ocultar comentarios</button>
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-pane fade" id="Descripcion">
+  <div class="container card mt-4">
+    <div class="card-body">
+      <h4 class="card-title mb-4">
+        Descripción del Producto
+      </h4>
+      <p class="card-text">
+        {{ productos.Descripcion | safe }}
+      </p>
+    </div>
+  </div>
+</div>
+<br>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const txtQty = document.getElementById("txtQty");
+      const btnMinus = document.getElementById("btnMinus");
+      const btnPlus = document.getElementById("btnPlus");
+  
+      btnMinus.addEventListener("click", function() {
+        let qty = parseInt(txtQty.value, 10);
+        qty = isNaN(qty) ? 0 : qty;
+  
+        if (qty > 1) {
+          qty--;
+          txtQty.value = qty;
+        }
+      });
+  
+      btnPlus.addEventListener("click", function() {
+        let qty = parseInt(txtQty.value, 10);
+        qty = isNaN(qty) ? 0 : qty;
+        let stock = parseInt("{{ productos.stock }}", 10); // Obtener el valor del stock desde el contexto de Django
+  
+        if (qty < stock) {
+          qty++;
+          txtQty.value = qty;
+        }
+      });
+  });
+
+  document.addEventListener("DOMContentLoaded", function(event) {
+    // Obtén el nuevo_comentario_id del contexto
+    const nuevo_comentario_id = {{ nuevo_comentario_id|default:"null" }};
+
+    // Si hay un nuevo_comentario_id, desplázate hasta ese comentario
+    if (nuevo_comentario_id) {
+        const comentario = document.getElementById(`comentario-${nuevo_comentario_id}`);
+        if (comentario) {
+            comentario.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  let mostrar_mas_comentarios = false; // Variable para controlar si se muestran más comentarios
+  const btnMostrarMasComentarios = document.getElementById("mostrarMasComentarios");
+  const btnOcultarComentarios = document.getElementById("ocultarComentarios");
+  
+  // Función para mostrar más comentarios
+  function mostrarMasComentarios() {
+      const comentarios = document.querySelectorAll(".comment-container .box");
+      comentarios.forEach((comentario, index) => {
+          if (index >= 3) {
+              comentario.classList.remove("d-none");
+          }
+      });
+      mostrar_mas_comentarios = true;
+      btnMostrarMasComentarios.style.display = "none";
+      btnOcultarComentarios.style.display = "block";
+  }
+  
+  // Función para ocultar comentarios
+  function ocultarComentarios() {
+      const comentarios = document.querySelectorAll(".comment-container .box");
+      comentarios.forEach((comentario, index) => {
+          if (index >= 3) {
+              comentario.classList.add("d-none");
+          }
+      });
+      mostrar_mas_comentarios = false;
+      btnMostrarMasComentarios.style.display = "block";
+      btnOcultarComentarios.style.display = "none";
+  }
+  
+  if (btnMostrarMasComentarios) {
+      btnMostrarMasComentarios.addEventListener("click", mostrarMasComentarios);
+  }
+  
+  if (btnOcultarComentarios) {
+      btnOcultarComentarios.addEventListener("click", ocultarComentarios);
+  }
+});
+
+$(document).ready(function () {
+  $('#miTabs a').on('click', function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+  })
+});
+
+var originalCentralImage;
+
+$(document).ready(function() {
+  // Al cargar la página, guarda la imagen central original
+  originalCentralImage = $('#centralImage img').attr('src');
+});
+
+function changeCentralImage(url) {
+  // Cambia la imagen central al pasar el mouse sobre una imagen
+  $('#centralImage img').attr('src', url);
+}
+
+function resetCentralImage() {
+  // Restaura la imagen central al salir del área de imágenes
+  $('#centralImage img').attr('src', originalCentralImage);
+}
+  </script>
+  
+
+{% endblock content %}

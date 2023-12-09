@@ -1,0 +1,20 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Editar Dirección de Envío</h2>
+                        <form id="direccion-form" method="post">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Guardar Dirección</button>
+                        </form>
+                    </div>
+                </div>
+            
+</div>
+{% endblock %}

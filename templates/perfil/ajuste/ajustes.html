@@ -1,0 +1,61 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="container mt-5">
+    <div class="card">
+      <div class="d-flex align-items-center">
+        <div class="p-3">
+          {% if perfil.foto %}
+            <img class="rounded-circle" src="{{ perfil.foto.url }}" alt="Foto de perfil" width="100" height="100">
+          {% else %}
+            <div class="rounded-circle perfil-foto-placeholder" style="width: 100px; height: 100px; background-color: #ccc; display: flex; align-items: center; justify-content: center;">
+              <p style="margin: 0;">No hay foto de perfil</p>
+            </div>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">{{ user.username }}</h2>
+                {% if user.email is None %}
+                <p class="card-text">Email : <span style="color: red;">Por favor, completa tu Email.</span></p>
+              {% else %}
+              <p class="card-text">Email: {{ user.email }}</p>
+              {% endif %}
+
+              {% if user.first_name is None %}
+                <p class="card-text">Nombre: <span style="color: red;">Por favor, completa tu nombre.</span></p>
+              {% else %}
+                <p class="card-text">Nombre: {{ user.first_name }}</p>
+              {% endif %}
+
+              {% if user.last_name is None %}
+                <p class="card-text">Apellido: <span style="color: red;">Por favor, completa tu apellido.</span></p>
+              {% else %}
+                <p class="card-text">Apellido: {{ user.last_name }}</p>
+              {% endif %}
+
+              {% if perfil.fecha_nacimiento is None %}
+                <p class="card-text">Fecha de Nacimiento: <span style="color: red;">Por favor, completa tu fecha de nacimiento.</span></p>
+              {% else %}
+                <p class="card-text">Fecha de Nacimiento: {{ perfil.fecha_nacimiento }}</p>
+              {% endif %}
+
+              {% if perfil.telefono is None %}
+                <p class="card-text">Teléfono: <span style="color: red;">Por favor, completa tu número de teléfono.</span></p>
+              {% else %}
+                <p class="card-text">Teléfono: {{ perfil.telefono }}</p>
+              {% endif %}
+
+              {% if perfil.sexo is None %}
+                <p class="card-text">Sexo: <span style="color: red;">Por favor, completa tu sexo.</span></p>
+              {% else %}
+                <p class="card-text">Sexo: {{ perfil.get_sexo_display }}</p>
+              {% endif %}
+          <!-- Agrega más campos según sea necesario -->
+          <a href="{% url 'tienda:editar_perfil' user.id %}" class="btn btn-primary btn-editar">Editar Perfil</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

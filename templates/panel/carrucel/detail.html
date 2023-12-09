@@ -1,0 +1,28 @@
+{% extends "navbar/tienda.html" %}
+
+{% block content %}
+<hr>
+<div class="py-1">
+  <div class="container">
+    <div class="row   ">
+      <div class="col-md-12">
+        <div class="card " style="width: 50rem;">
+          <div class="card-body">
+                  <h1 class="mb-0">    
+                    Detalles Carucel
+                  </h1>
+                  <hr>
+                  <h3>{{ carrucel.titulo }}</h3>
+                  <p>{{ carrucel.descripcion }}</p>
+                  <td><img src="{{ carrucel.imagen.url }}" alt="{{ carrucel.titulo }}"  width="700" height="300"></td>
+                  <p class="   text-justify">
+                    <a class="btn btn-info my-4 mx-auto" href="{% url 'tienda:carrucel_list'  %}">atras</a>
+                    <a class="btn btn-dark my-4 mx-auto" href="{% url 'tienda:carrucel_update' carrucel.id %}">Modificar</a>
+                    <a class="btn btn-dark my-4 mx-auto" href="{% url 'tienda:carrucel_delete' carrucel.id %}">Eliminar</a>
+                  </p>
+          </div>
+        </div>
+    </div>
+  </div>  
+</div>
+{% endblock  %}

@@ -1,0 +1,14 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h1>Subir Imagen</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Subir Imagen</button>
+</form>
+
+{% endblock %}

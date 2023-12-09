@@ -1,0 +1,50 @@
+{% extends "navbar/tienda.html" %}
+ {% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-8 mx-auto   - mt-3">
+            {{ mensaje }} {% load crispy_forms_tags %}
+            <div class="card p-2">
+                <h3 class="   text-center my-2">MODIFICAR CARRUCEL</h3>
+                <div class="card body p-2">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="titulo">Titulo:</label>
+                        <input type="text" class="form-control" name="titulo" value="{{ carrucel.titulo }}" required><br>
+                    
+                        <label for="descripcion">Descripcion:</label>
+                        <textarea name="descripcion"  class="form-control" required>{{ carrucel.descripcion }}</textarea><br>
+                    
+                        <label for="imagen">Imagen:</label>
+                        <input type="file" class="form-control" name="imagen"><br>
+                    
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'tienda:carrucel_list' %}" class="btn btn-secondary mt-2 mx-2" button >Cancelar</a>
+                            <button type="submit " class="btn btn-danger mt-2 mx-2 " button >Modificar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}
+<!-- carrucel/update.html -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="titulo">Titulo:</label>
+    <input type="text" name="titulo" value="{{ carrucel.titulo }}" required><br>
+
+    <label for="descripcion">Descripcion:</label>
+    <textarea name="descripcion" required>{{ carrucel.descripcion }}</textarea><br>
+
+    <label for="imagen">Imagen:</label>
+    <input type="file" name="imagen"><br>
+
+    <input type="submit" value="Update">
+</form>
+
+<a href="{% url 'tienda:carrucel_list' %}">Back to List</a>

@@ -1,0 +1,29 @@
+{% extends "navbar/tienda.html" %}
+
+
+
+{% block content %}
+
+<br>
+
+<div class="card ">
+    <div class="card-body">
+        <h1>Perfil usuario y mascotas</h1>
+
+        <p><b>Nombre:</b> {{ user.first_name }}</p>
+        <p><b>Apellido:</b> {{ user.last_name }}</p>
+        <p><b>Nombre de usuario:</b> {{ user.username }}</p>
+        <p><b>Correo electrónico:</b> {{ user.email }}</p>
+        <div class="row">
+            <div class="col-4 text-right">
+                <a href="/solgas/usuario/administrar/" class="btn btn-dark my-4 mx-auto">Atras</a>
+                <td>
+                    <a class="btn btn-primary my-4 mx-auto" href="/solgas/usuario/modificar/{{user.id}}/">Cambiar contraseña</a>
+                </td>
+
+            </div>
+        </div>    
+    </div>
+    
+</div>
+{% endblock content %}

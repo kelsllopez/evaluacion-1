@@ -1,0 +1,106 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% block content %}
+
+<body>
+  <div class="container p-3">
+    <ul class="nav justify-content-center bg-light">
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Productos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:mostrar_materiales' %}">Materiales</a>
+      </a>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listar_categorias' %}">Categorias</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listar_comentarios' %}">Valoraciones</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listarcontacto' %}">Contacto</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="/solgas/usuario/administrar">Usuario</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:administrar_pedidos' %}">Pedidos</a>
+      </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/carrucel">carrucel</a>
+      </li> 
+    </ul>
+  </div>
+  
+
+<div class="container mt-3">
+  <div class="card">
+    <div class="card-header text-center font-weight-bold">
+      {{ title }}
+    </div>
+    <div class="card-body">
+      <form class="flex-grow-1 mr-2 py-2" method="GET" action="{% url 'tienda:listar_productos' %}">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Buscar producto..." name="q" value="{{ request.GET.q }}">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+          </div>
+        </div>
+      </form>
+      <div class="d-flex justify-content-end mb-2">
+        <a href="{% url 'tienda:agregar_producto' %}" class="btn btn-success btn-sm">
+          <i class="bi bi-plus-circle-fill"></i> Añadir Productos
+        </a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Categoria</th>
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if productoss %}
+            {% for producto in productoss %}
+            <tr>
+              <td>{{ producto.id }}</td>
+              <td>{{ producto.Nombre }}</td>
+              <td>{{ producto.precio }}</td>
+              <td>{{ producto.stock }}</td>
+              <td>{{ producto.categoria }}</td>
+              <td>
+                <a class="btn btn-secondary btn-sm" href="{% url 'tienda:modificar_producto' producto.Nombre %}" type="button"><i class="bi bi-pencil-square"></i></a>
+                <a class="btn btn-danger btn-sm" href="{% url 'tienda:eliminar_producto' producto.Nombre %}" type="button"><i class="bi bi-trash-fill"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+              <td colspan="6" class="text-center">
+                <div class="alert alert-primary" role="alert">
+                  No hay Productos Agregados
+                </div>
+              </td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "navbar/tienda.html" %}
+
+
+{% block content %}
+
+
+
+{% if users %}
+
+<br>
+
+<div class="container p-3">
+    <ul class="nav justify-content-center bg-light">
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Productos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:mostrar_materiales' %}">Materiales</a>
+      </a>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listar_categorias' %}">Categorias</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listar_comentarios' %}">Valoraciones</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listarcontacto' %}">Contacto</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Usuario</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'tienda:administrar_pedidos' %}">Pedidos</a>
+      </a>
+      </li>
+    </ul>
+  </div>
+  
+  
+<br>
+<div class="d-flex flex-column">
+  <div class="container text-center">
+      <div class="row justify-content-center">
+          <div class="col-lg-12">
+              <div class="card">
+                  <div class="card-header text-center font-weight-bold">
+                      {{ title }}
+                  </div>
+                  <form class="flex-grow-1 mr-2 py-2" method="GET" action="{% url 'tienda:usuarioadministrar' %}">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Buscar producto..." name="buscador" value="{{ request.GET.buscador }}">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                      </div>
+                    </div>
+                  </form>
+                  <table class="table table-condensed table-hover">
+                      <thead class=" text-center">
+                        <tr>
+                          <th scope="col">#id</th>
+                          <th scope="col">Nombre de usuario</th>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Apellido</th>
+                          <th scope="col">Correo electrónico</th>
+                          <th scope="col">Rol</th>
+                          <th colspan="3">Opciones</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-center ">
+                        {% for u in users %}
+                          <tr>
+                            <td class="bg-dark text-white">{{ u.id }}</td>
+                            <td>{{ u.username }}</td>
+                            <td>{{ u.first_name }}</td>
+                            <td>{{ u.last_name }}</td>
+                            <td>{{ u.email }}</td>
+                            {% if u.is_staff %}
+                              <td><p class="badge badge-success">Administrador</p></td>
+                            {% else %}
+                              <td><p class="badge badge-warning">Cliente</p></td>
+                            {% endif %}   
+                            <td>
+                              <a class="btn btn-secondary btn-sm" href="/editar_perfil/{{ u.id }}/"><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                            <td>
+                              <a class="btn btn-danger" href="/solgas/usuario/eliminar/{{ u.id }}/"><i class="bi bi-trash-fill"></i></a>
+                            </td>
+
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>      
+                </div>
+                {% include 'paginator.html' %}
+
+              </div>
+            </div>
+          </div>
+        {% else %}
+        <div class="alert alert-secondary" role="alert">
+          No hay personas ingresadas
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>  
+{% endblock content %}

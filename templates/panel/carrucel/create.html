@@ -1,0 +1,35 @@
+{% extends "navbar/tienda.html" %}
+{% block content %}
+<div class="d-flex flex-colum py-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8 mx-auto   - mt-3">
+                {% load crispy_forms_tags %}
+                <div class="card p-2">
+                    <h3 class="   text-center my-2">CARRUCEL</h3>
+                    <div class="card body p-2">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %} 
+
+                            <label for="titulo">Titulo:</label>
+                            <input type="text" class="form-control"  name="titulo" required><br>
+                        
+                            <label for="descripcion">Descripcion:</label>
+                            <textarea name="descripcion" class="form-control"  required></textarea><br>
+                        
+                            <label for="imagen">Imagen:</label>
+                            <input type="file" class="form-control"  name="imagen" required>                            
+                            <div class="d-flex justify-content-end">
+                                <a href="{% url 'tienda:carrucel_list' %}" class="btn btn-secondary mt-2 mx-2" button >Cancelar</a>
+                                <button type="submit " class="btn btn-danger mt-2 mx-2 " button >Agregar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+

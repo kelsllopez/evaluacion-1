@@ -1,0 +1,78 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container p-3">
+  <ul class="nav justify-content-center bg-light">
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Productos</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:mostrar_materiales' %}">Materiales</a>
+    </a>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_categorias' %}">Categorias</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_comentarios' %}">Valoraciones</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listarcontacto' %}">Contacto</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="/solgas/usuario/administrar">Usuario</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:administrar_pedidos' %}">Pedidos</a>
+    </a>
+    </li>
+  </ul>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header text-center font-weight-bold">
+      <h4>Material</h4>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between mb-3">
+        <form class="flex-grow-1 mr-2" method="GET" action="{% url 'tienda:mostrar_materiales' %}">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar materiales..." name="q" value="{{ request.GET.q }}">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+            </div>
+          </div>
+        </form>
+        <a href="{% url 'tienda:agregar_material' %}" class="btn btn-primary">Agregar Material</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Fecha de Creación</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for material in materiales %}
+              <tr>
+                <td>{{ material.nombre }}</td>
+                <td>{{ material.created_at }}</td>
+                <td>
+                  <!-- Enlaces para editar y eliminar material -->
+                  <a class="btn btn-secondary btn-sm"  href="{% url 'tienda:editar_material' material.id %}" type="button"><i class="bi bi-pencil-square"></i></a> 
+                  <a  class="btn btn-danger btn-sm" href="{% url 'tienda:eliminar_material' material.id %}" type="button"><i class="bi bi-trash-fill"></i></a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

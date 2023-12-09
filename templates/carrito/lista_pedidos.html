@@ -1,0 +1,66 @@
+{% extends 'navbar/tienda.html' %}
+{% load humanize %}
+
+{% block content %}
+<style>
+  .card {
+    transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa; /* Cambia el color al pasar el ratón */
+  }
+
+  .card-header {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .list-group-item {
+    border: none;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  .list-group-item img {
+    margin-right: 10px; /* Ajusta el margen a tu preferencia */
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .list-group-item:hover img {
+    transform: scale(1.5);
+  }
+</style>
+<div class="container">
+  <h2>Tus Pedidos</h2>
+  {% for pedido, detalles_pedido in pedidos %}
+  <div class="card mb-4 shadow">
+    <div class="card-header">
+      <h5 class="card-title">Número de pedido: {{ pedido.id }}</h5>
+      <p class="card-text">Fecha de creación: {{ pedido.creado }}</p>
+      <p class="card-text">Estado de pedido: {{ pedido.estado }}</p>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        {% for detalle in detalles_pedido %}
+          <li class="list-group-item">
+            {% if detalle.producto %}
+              <img src="{{ detalle.producto.Imagen.url }}" alt="{{ detalle.producto.Nombre }}" width="50" height="50">
+            {% else %}
+              <img src="https://dummyimage.com/50x50/dee2e6/6c757d.jpg" alt="Producto eliminado" width="50" height="50">
+            {% endif %}
+            {{ detalle.producto.Nombre }} - Cantidad: {{ detalle.cantidad }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

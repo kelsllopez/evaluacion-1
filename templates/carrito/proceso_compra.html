@@ -1,0 +1,72 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Proceso de Compra</h1>
+
+      <form method="post" action="">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <button type="submit" class="btn btn-primary mt-3">Realizar Compra</button>
+      </form>
+    </div>
+    <div class="col-md-6">
+        <h2>Productos en el Carrito:</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Producto</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in carrito %}
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="{{ item.producto.Imagen.url }}" alt="{{ item.producto.Nombre }}" class="img-thumbnail product-image mr-2" width="50" height="50">
+                    {{ item.producto.Nombre }}
+                  </div>
+                </td>
+                <td>{{ item.producto_cantidad }}</td>
+                <td>${{ item.subtotal }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var thumbnails = document.querySelectorAll('.product-image');
+
+    thumbnails.forEach(function (thumbnail) {
+      thumbnail.addEventListener('mouseover', function () {
+        enlargeImage(thumbnail);
+      });
+
+      thumbnail.addEventListener('mouseout', function () {
+        resetImage(thumbnail);
+      });
+    });
+
+    function enlargeImage(thumbnail) {
+      thumbnail.style.transform = 'scale(1.5)';
+      thumbnail.style.transition = 'transform 0.3s ease-in-out';
+    }
+
+    function resetImage(thumbnail) {
+      thumbnail.style.transform = 'scale(1)';
+      thumbnail.style.transition = 'transform 0.3s ease-in-out';
+    }
+  });
+</script>
+{% endblock %}

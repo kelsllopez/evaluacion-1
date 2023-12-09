@@ -1,0 +1,85 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+    .predeterminada {
+        background-color: lightgreen;
+    }
+    
+    .no-predeterminada {
+        background-color: lightgray;
+    }
+
+    .card-footer {
+        background: none;
+        border: none;
+
+    }
+</style>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2>Direcciones Guardadas</h2>
+
+            {% if direcciones %}
+            <a class="btn btn-success btn-sm mb-4" href="{% url 'tienda:ubicacion-nuevas' %}" type="button"><p>Agregar Otra Ubicación</p></a>
+
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    {% for direccion in direcciones %}
+                        {% if direccion.predeterminada %}
+                            <div class="col mb-4">
+                                <div class="card predeterminada h-100">
+                                    <div class="card-body">
+                                        <p class="text-end text-success">¡Predeterminada!</p>
+                                        <h5 class="card-title"><i class="bi bi-person-fill me-2"></i> {{ direccion.nombre_contacto }}</h5>
+                                        <p class="card-text"><i class="bi bi-telephone-fill me-2"></i> Teléfono: {{ direccion.telefono }}</p>
+                                        <p class="card-text"><i class="bi bi-geo-alt-fill me-2"></i> Dirección: {{ direccion.direccion }}</p>
+                                    </div>
+                                    <div class="card-footer" style="border: none; background: none;">
+                                        <a class="btn btn-secondary btn-sm" href="{% url 'tienda:ubicacion-editar' direccion.id %}" type="button"><i class="bi bi-pencil-square me-1"></i> Editar</a>
+                                        <a class="btn btn-danger btn-sm" href="{% url 'tienda:ubicacion-eliminar' direccion.id %}" type="button"><i class="bi bi-trash-fill me-1"></i> Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% for direccion in direcciones %}
+                        {% if not direccion.predeterminada %}
+                            <div class="col mb-4">
+                                <div class="card no-predeterminada h-100">
+                                    <div class="card-body">
+                                        <p class="text-end text-success"> . </p>
+                                        <h5 class="card-title"><i class="bi bi-person-fill me-2"></i> {{ direccion.nombre_contacto }}</h5>
+                                        <p class="card-text"><i class="bi bi-telephone-fill me-2"></i> Teléfono: {{ direccion.telefono }}</p>
+                                        <p class="card-text"><i class="bi bi-geo-alt-fill me-2"></i> Dirección: {{ direccion.direccion }}</p>
+                                    </div>
+                                    <div class="card-footer" style="border: none; background: none;">
+                                        <a class="btn btn-secondary btn-sm" href="{% url 'tienda:ubicacion-editar' direccion.id %}" type="button"><i class="bi bi-pencil-square me-1"></i> Editar</a>
+                                        <a class="btn btn-danger btn-sm" href="{% url 'tienda:ubicacion-eliminar' direccion.id %}" type="button"><i class="bi bi-trash-fill me-1"></i> Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Editar Dirección de Envío</h2>
+                        <form id="direccion-form" method="post">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Guardar Dirección</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

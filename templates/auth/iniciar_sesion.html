@@ -1,0 +1,58 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+    .btn-jewelry {
+        background-color: #ffcc00;
+        border-color: #ffcc00;
+    }
+
+    .btn-jewelry:hover {
+        background-color: #ffdb4d;
+        border-color: #ffdb4d;
+    }
+
+    .card {
+        transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        transform: scale(1.05);
+    }
+
+    .card-body {
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .card-body:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg rounded">
+                <div class="card-header text-center bg-gold">
+                    <h3 class="mb-0">Iniciar Sesión</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="" class="mt-4">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary btn-lg btn-jewelry" type="submit">Ingresar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center py-3">
+                <p class="mb-0">¿No tienes una cuenta? <a href="{% url 'tienda:registrar' %}">Regístrate aquí</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

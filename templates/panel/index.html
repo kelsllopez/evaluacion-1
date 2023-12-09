@@ -1,0 +1,166 @@
+{% extends "navbar/tienda.html" %}
+{% load static %}
+{% block content %}
+<style media="screen">
+  .market-update-block {
+    background: #f8f9fa; /* Pastel color */
+    border: 1px solid #dee2e6; /* Border for 3D effect */
+    box-shadow: 2px 2px 5px #ccc; /* Box shadow for depth */
+    margin-bottom: 20px; /* Separate each block */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .market-update-block h3 {
+    color: #343a40; /* Dark color */
+    font-size: 1.8em;
+    font-family: 'Carrois Gothic', sans-serif;
+  }
+
+  .market-update-block h4 {
+    font-size: 1em;
+    color: #343a40; /* Dark color */
+    font-family: 'Carrois Gothic', sans-serif;
+  }
+
+  .market-update-block p {
+    color: #343a40; /* Dark color */
+    font-size: 0.7em;
+  }
+
+  .market-update-block:hover {
+    background: #e0e0e0; /* Darker color for hover effect */
+  }
+
+  .market-update-right i.fa {
+    font-size: 2.5em;
+    color: #343a40;
+    background: #fff;
+    border: 1px solid #dee2e6; /* Border for 3D effect */
+    box-shadow: 2px 2px 5px #ccc; /* Box shadow for depth */
+    margin-bottom: 10px; /* Separate icon from text */
+  }
+
+  .market-update-left {
+  }
+
+  .container-custom {
+    max-width: 80%; /* Adjust the percentage to control the width */
+    margin: 0 auto; /* Center the container */
+  }
+</style>
+<div class="container p-3">
+  <ul class="nav justify-content-center bg-light">
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_productos' %}">Productos</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:mostrar_materiales' %}">Materiales</a>
+    </a>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_categorias' %}">Categorias</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listar_comentarios' %}">Valoraciones</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:listarcontacto' %}">Contacto</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url "tienda:usuarioadministrar" %}">Usuario</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'tienda:administrar_pedidos' %}">Pedidos</a>
+    </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/carrucel">carrucel</a>
+    </li> 
+  </ul>
+</div>
+
+
+<div class="container-custom ">
+  <div class="row">
+    <div class="col ">
+      <div class="market-update-gd">
+        <div class="market-update-block clr-block-1">
+          <div class="market-update-left">
+            <h3>{{customercount}}</h3>
+            <h4>Usuario registrado</h4>
+          </div>
+
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col ">
+      <div class="market-update-gd">
+        <div class="market-update-block clr-block-2">
+          <div class="market-update-left">
+            <h3>{{productcount}}</h3>
+            <h4>Total Producto</h4>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col ">
+      <div class="market-update-gd">
+        <div class="market-update-block clr-block-2">
+          <div class="market-update-left">
+            <h3>{{materialcount}}</h3>
+            <h4>Total Materiales</h4>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="market-update-gd">
+        <div class="market-update-block clr-block-2">
+          <div class="market-update-left">
+            <h3>{{categoriacount}}</h3>
+            <h4>Total Categoria</h4>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col ">
+      <div class="market-update-gd">
+        <div class="market-update-block clr-block-2">
+          <div class="market-update-left">
+            <h3>{{comentariocount}}</h3>
+            <h4>Total Comentario</h4>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="market-update-gd">
+        <div class="market-update-block clr-block-2">
+          <div class="market-update-left">
+            <h3>{{contactocount}}</h3>
+            <h4>Total Contacto</h4>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

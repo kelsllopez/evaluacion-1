@@ -1,0 +1,25 @@
+{% extends "navbar/tienda.html" %}
+{% block content %}
+<!-- carrucel/delete.html -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-danger text-white">
+          <h3 class="mb-0">ELIMINAR CARUCEL</h3>
+        </div>
+        <div class="card-body">
+          <p class="lead">Usted esta seguro de eliminar  "{{ carrucel.titulo }}"?</p>
+          <form method="POST" action="{% url 'tienda:carrucel_delete' carrucel.id %}">
+            {% csrf_token %}
+            <div class="text-center">
+              <button type="submit" class="btn btn-danger">Si</button>
+              <a href="{% url 'tienda:carrucel_list' %}" class="btn btn-secondary">No</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
